@@ -7,7 +7,8 @@ azure-common==1.1.26
 azure-storage-blob==12.3.1
 tqdm==4.43.0
 Jinja2==2.11.1
-WeasyPrint==51
+# 59 is incompatible with pdfminer (see https://github.com/Kozea/WeasyPrint/issues/1885)
+WeasyPrint==58.1
 matplotlib==3.2.1
 scikit-image==0.16.2
 opencv-python==4.2.0.34

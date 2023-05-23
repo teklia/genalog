@@ -29,7 +29,7 @@ DEFAULT_STYLE_COMBINATION = {
 class Document(object):
     """ A composite object that represents a document """
 
-    def __init__(self, content, template, **styles):
+    def __init__(self, content, template, base_url=None, **styles):
         """Initialize a Document object with source template and content
 
         Arguments:
@@ -64,6 +64,7 @@ class Document(object):
         # This is a rendered document ready to be painted on a cairo surface
         self._document = None  # weasyprint.document.Document object
         self.compiled_html = None
+        self.base_url = base_url
         # Update the default styles and initialize self._document object
         self.update_style(**styles)
 
@@ -194,7 +195,8 @@ class Document(object):
         # Recompile the html template and the document obj
         self.compiled_html = self.render_html()
         self._document = HTML(
-            string=self.compiled_html
+            string=self.compiled_html,
+            base_url=self.base_url
         ).render()  # weasyprinter.document.Document object
 
 
@@ -281,7 +283,7 @@ class DocumentGenerator:
             style_combinations
         )
 
-    def create_generator(self, content, templates_to_render):
+    def create_generator(self, content, templates_to_render, base_url=None):
         """Create a Document generator
 
         Arguments:
@@ -299,7 +301,7 @@ class DocumentGenerator:
                 )
             template = self.template_env.get_template(template_name)
             for style in self.styles_to_generate:
-                yield Document(content, template, **style)
+                yield Document(content, template, base_url,**style)
 
     @staticmethod
     def expand_style_combinations(styles):
